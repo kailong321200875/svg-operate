@@ -3,6 +3,8 @@ import { useStoreState, useStoreActions } from "@/store";
 import { v4 } from "uuid";
 import { LayerType } from "@/types/base-layer";
 import ImageLayer from "../image-layer";
+import BaseLayer from "../base-layer";
+import LayerOperate from "../layer-operate";
 
 const RenderLayers: FC = () => {
   const { layers } = useStoreState((state) => state.stage);
@@ -24,7 +26,11 @@ const RenderLayers: FC = () => {
     return layers.map((layer) => {
       switch (layer.layerType) {
         case LayerType.Image:
-          return <ImageLayer key={layer.id} layer={layer} />;
+          return (
+            <BaseLayer key={layer.id}>
+              <ImageLayer layer={layer} />
+            </BaseLayer>
+          );
         default:
           return null;
       }
@@ -32,10 +38,17 @@ const RenderLayers: FC = () => {
   };
 
   useEffect(() => {
-    initLayers();
+    setTimeout(() => {
+      initLayers();
+    }, 2000);
   }, []);
 
-  return <>{renderLayers()}</>;
+  return (
+    <>
+      <LayerOperate />
+      {renderLayers()}
+    </>
+  );
 };
 
 export default memo(RenderLayers);

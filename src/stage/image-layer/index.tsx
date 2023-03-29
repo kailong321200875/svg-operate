@@ -8,6 +8,7 @@ export interface ImageLayerProps {
 
 const ImageLayer: FC<ImageLayerProps> = (props) => {
   const { layer } = props;
+  console.log("ImageLayer: ", layer);
 
   const imageStyle: CSSProperties = {
     width: layer.width,
@@ -16,11 +17,16 @@ const ImageLayer: FC<ImageLayerProps> = (props) => {
     left: layer.x,
     top: layer.y,
     display: "inline-block",
+    userSelect: "none",
   };
 
   return (
     <div id={layer.id} className={cs("m-image-layer")} style={imageStyle}>
-      <img src={layer.url} alt="" />
+      <img
+        src={layer.url}
+        alt=""
+        style={{ userSelect: "none", pointerEvents: "none" }}
+      />
     </div>
   );
 };
