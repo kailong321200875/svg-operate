@@ -1,6 +1,6 @@
 import EditorStage from "./stage/editor-stage";
 import "./App.less";
-import RenderLayers from "./stage/render-layers";
+import RenderLayers from "./layers/render-layers";
 
 function App() {
   return (

@@ -4,7 +4,7 @@ import { v4 } from "uuid";
 import { LayerType } from "@/types/base-layer";
 import ImageLayer from "../image-layer";
 import BaseLayer from "../base-layer";
-import LayerOperate from "../layer-operate";
+import LayerOperate from "@/operate";
 
 const RenderLayers: FC = () => {
   const { layers } = useStoreState((state) => state.stage);
