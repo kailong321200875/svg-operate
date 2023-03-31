@@ -1,11 +1,11 @@
-export enum LayerType {
+export enum LayerTypeEnum {
   Image = "image",
   Text = "text",
 }
 
 export interface BaseLayer {
   id: string;
-  layerType: LayerType;
+  layerType: LayerTypeEnum;
   width: number;
   height: number;
   x: number;

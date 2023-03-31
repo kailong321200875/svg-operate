@@ -1,7 +1,7 @@
-import { BaseLayer, LayerType } from "./base-layer";
+import { BaseLayer, LayerTypeEnum } from "./base-layer";
 
 export interface ImageLayer extends BaseLayer {
-  layerType: LayerType.Image;
+  layerType: LayerTypeEnum.Image;
   url: string;
   name?: string;
 }
