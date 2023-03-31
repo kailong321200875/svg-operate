@@ -5,10 +5,11 @@ import { LayerType } from "@/types/base-layer";
 import ImageLayer from "../image-layer";
 import BaseLayer from "../base-layer";
 import LayerOperate from "@/operate";
+import useLayerHelper from "@/hooks/useLayerHelper";
 
 const RenderLayers: FC = () => {
-  const { layers } = useStoreState((state) => state.stage);
-  const { addLayer } = useStoreActions((actions) => actions.stage);
+  const layers = useStoreState((state) => state.layerModel.layers);
+  const { addLayer } = useLayerHelper();
 
   const initLayers = () => {
     addLayer({
@@ -19,6 +20,15 @@ const RenderLayers: FC = () => {
       height: 320,
       x: 0,
       y: 0,
+    });
+    addLayer({
+      id: v4(),
+      layerType: LayerType.Image,
+      url: "https://xiuxiupro-material-center.meitudata.com/material/image/641831cc8f93d2858.png",
+      width: 200,
+      height: 200,
+      x: 200,
+      y: 200,
     });
   };
 

@@ -1,20 +1,25 @@
-import { useStoreState } from "@/store";
+import { useStoreActions } from "@/store";
 
 const useLayerHelper = () => {
-  const { layers } = useStoreState((state) => state.stage);
+  const getLayerById = useStoreActions(
+    (actions) => actions.layerModel.findLayerById
+  );
 
-  const getLayer = (id: string) => {
-    console.log(layers);
-    return layers.find((layer) => layer.id === id);
-  };
+  const addLayer = useStoreActions((actions) => actions.layerModel.addLayer);
 
-  const getLayerIndex = (id: string) => {
-    return layers.findIndex((layer) => layer.id === id);
-  };
+  const addActiveLayer = useStoreActions(
+    (actions) => actions.layerModel.addActiveLayer
+  );
+
+  const updateLayerById = useStoreActions(
+    (actions) => actions.layerModel.updateLayerById
+  );
 
   return {
-    getLayer,
-    getLayerIndex,
+    getLayerById,
+    addLayer,
+    addActiveLayer,
+    updateLayerById,
   };
 };
 

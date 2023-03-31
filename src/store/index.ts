@@ -1,15 +1,18 @@
 import { createStore, createTypedHooks } from "easy-peasy";
 import { stageModel, StageModel } from "./models/stage";
 import { operateModel, OperateModel } from "./models/operate";
+import { layerModel, LayerModel } from "./models/layer";
 
 interface EditorModel {
-  stage: StageModel;
-  operate: OperateModel;
+  stageModel: StageModel;
+  operateModel: OperateModel;
+  layerModel: LayerModel;
 }
 
 const editorModel: EditorModel = {
-  stage: stageModel,
-  operate: operateModel,
+  stageModel,
+  operateModel,
+  layerModel,
 };
 
 export const store = createStore(editorModel);

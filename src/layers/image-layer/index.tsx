@@ -25,7 +25,12 @@ const ImageLayer: FC<ImageLayerProps> = (props) => {
       <img
         src={layer.url}
         alt=""
-        style={{ userSelect: "none", pointerEvents: "none" }}
+        style={{
+          userSelect: "none",
+          pointerEvents: "none",
+          width: "100%",
+          height: "100%",
+        }}
       />
     </div>
   );
