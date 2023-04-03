@@ -54,6 +54,7 @@ export const layerModel: LayerModel = {
    * 添加被激活的图层
    */
   addActiveLayer: action((state, layer) => {
+    if (state.activeLayer?.id === layer?.id) return; // 如果是同一个图层
     // 如果不是数组
     state.activeLayer = layer;
   }),

@@ -5,10 +5,11 @@ import { useStoreState } from "@/store";
 
 const LayerOperate: FC = () => {
   const activeLayer = useStoreState((state) => state.layerModel.activeLayer);
+  const moving = useStoreState((state) => state.operateModel.moving);
   return (
     <>
       <Move />
-      <Resize activeLayer={activeLayer} />
+      <Resize activeLayer={activeLayer} moving={moving} />
     </>
   );
 };

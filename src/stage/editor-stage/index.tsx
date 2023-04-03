@@ -1,5 +1,6 @@
 import { FC, memo } from "react";
 import cs from "classnames";
+import "./index.less";
 
 interface EditorStageProps {
   width: number;
@@ -16,8 +17,6 @@ const EditorStage: FC<EditorStageProps> = (props) => {
       style={{
         width,
         height,
-        outline: "1px solid #ddd",
-        position: "relative",
       }}
     >
       {children}

@@ -29,3 +29,17 @@ export const findParentByClass = (
 //   mousePoint.y /= scale;
 //   return mousePoint;
 // };
+
+// 获取某个元素的宽高及其相对于视口的位置
+export const getDomInfo = (dom: HTMLElement) => {
+  if (!dom) {
+    return null;
+  }
+  const { top, left, width, height } = dom.getBoundingClientRect();
+  return {
+    top,
+    left,
+    width,
+    height,
+  };
+};
