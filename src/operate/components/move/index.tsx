@@ -19,7 +19,10 @@ const Move: FC = () => {
     }
 
     const layerId = (e.target as HTMLElement).getAttribute("id");
-    if (!layerId) return;
+    if (!layerId) {
+      addActiveLayer(undefined);
+      return;
+    }
 
     const activeLayer = getLayerById(layerId);
     if (!activeLayer) return;

@@ -66,7 +66,7 @@ const Anchor: FC<AnchorDataProps> = memo((props) => {
       }
       setPosition({ x: adjustedX, y: adjustedY });
     }
-  }, [anchorData.position, activeLayer]);
+  }, [activeLayer]);
 
   return (
     <span
@@ -113,6 +113,8 @@ const Resize: FC<ResizeProps> = (props) => {
           ></Anchor>
         );
       });
+    } else {
+      return null;
     }
   };
 
@@ -132,17 +134,16 @@ const Resize: FC<ResizeProps> = (props) => {
     }
   }, [activeLayer]);
 
-  return (
+  return activeLayer ? (
     <div
       className={cs("m-resize", { "m-resize--moving": moving })}
       style={{
-        display: activeLayer ? "block" : "none",
         ...domInfo,
       }}
     >
       {renderAnchor()}
     </div>
-  );
+  ) : null;
 };
 
 export default memo(Resize);
