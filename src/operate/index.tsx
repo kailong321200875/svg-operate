@@ -9,7 +9,11 @@ const LayerOperate: FC = () => {
   return (
     <>
       <Move />
-      <Resize activeLayer={activeLayer} moving={moving} />
+      <Resize
+        key={activeLayer ? activeLayer.id : undefined}
+        activeLayer={activeLayer}
+        moving={moving}
+      />
     </>
   );
 };

@@ -13,17 +13,27 @@ export interface LayerModel {
     LayerModel,
     LayerType | undefined
   >;
-  activeLayer: LayerType | undefined;
+  activeLayer: Computed<LayerModel, LayerType | undefined>;
   addActiveLayer: Action<LayerModel, LayerType | undefined>;
-  updateLayerById: Thunk<
+  // updateLayerById: Thunk<
+  //   LayerModel,
+  //   { id: string; layer: LayerType },
+  //   undefined,
+  //   LayerModel
+  // >;
+  updateLayerById: Action<LayerModel, { id: string; layer: LayerType }>;
+  getActiveLayer: Thunk<
     LayerModel,
-    { id: string; layer: LayerType },
     undefined,
-    LayerModel
+    undefined,
+    LayerModel,
+    LayerType | undefined
   >;
+  selected: string | undefined;
 }
 
 export const layerModel: LayerModel = {
+  selected: undefined,
   /**
    * 图层数据
    */
@@ -34,7 +44,6 @@ export const layerModel: LayerModel = {
    */
   addLayer: action((state, layer) => {
     state.layers.push(layer);
-    console.log(state.layers);
   }),
 
   /**
@@ -48,7 +57,9 @@ export const layerModel: LayerModel = {
   /**
    * 被激活的图层
    */
-  activeLayer: undefined,
+  activeLayer: computed((state) => {
+    return state.layers.find((layer) => layer.id === state.selected);
+  }),
 
   /**
    * 添加被激活的图层
@@ -56,20 +67,18 @@ export const layerModel: LayerModel = {
   addActiveLayer: action((state, layer) => {
     if (state.activeLayer?.id === layer?.id) return; // 如果是同一个图层
     // 如果不是数组
-    state.activeLayer = layer;
+    state.selected = layer?.id;
   }),
 
-  /**
-   * 根据ID更新图层
-   * @param id 图层ID
-   * @param layer 图层数据
-   */
-  updateLayerById: thunk((_, { id, layer }, { getState }) => {
-    const layers = getState().layers;
+  updateLayerById: action((state, { id, layer }) => {
+    const layers = state.layers;
     const index = layers.findIndex((layer) => layer.id === id);
     if (index !== -1) {
       layers[index] = layer;
     }
-    console.log(layers);
+  }),
+
+  getActiveLayer: thunk((_, __, { getState }) => {
+    return getState().activeLayer;
   }),
 };

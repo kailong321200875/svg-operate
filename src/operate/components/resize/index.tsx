@@ -2,7 +2,6 @@ import React, { FC, memo, useEffect, useRef, useState } from "react";
 import operatePoint from "./operate-point";
 import { LayerType } from "@/types/layer";
 import cs from "classnames";
-import { getDomInfo } from "../../helper";
 import "./index.less";
 
 const WIDTH = 5;
@@ -43,17 +42,9 @@ interface ResizeProps {
   moving: boolean;
 }
 
-interface DomInfoProps {
-  width: number;
-  height: number;
-  left: number;
-  top: number;
-}
-
 const Resize: FC<ResizeProps> = (props) => {
   const { activeLayer, moving } = props;
   const currentTarget = useRef<HTMLElement>();
-  const [domInfo, setDomInfo] = useState<DomInfoProps | null>(null);
 
   const renderAnchor = () => {
     return operatePoint.map((item) => {
@@ -62,27 +53,14 @@ const Resize: FC<ResizeProps> = (props) => {
     });
   };
 
-  useEffect(() => {
-    if (activeLayer) {
-      const { id } = activeLayer;
-      const target = document.getElementById(id);
-      if (target) {
-        currentTarget.current = target;
-        const targetDomInfo = getDomInfo(target);
-        if (targetDomInfo) {
-          setDomInfo(targetDomInfo);
-        }
-      }
-    } else {
-      currentTarget.current = undefined;
-    }
-  }, [activeLayer]);
-
   return activeLayer ? (
     <div
       className={cs("m-resize", { "m-resize--moving": moving })}
       style={{
-        ...domInfo,
+        width: activeLayer?.width,
+        height: activeLayer?.height,
+        transform: `translate(${activeLayer.x}px, ${activeLayer.y}px)`,
+        transformOrigin: "center",
       }}
     >
       {renderAnchor()}

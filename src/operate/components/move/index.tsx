@@ -1,43 +1,51 @@
-import { FC, memo, useEffect, useState } from "react";
+import { FC, memo, useEffect, useRef } from "react";
 import { findParentByClass } from "../../helper";
-import { useStoreState, useStoreActions } from "@/store";
+import { useStoreState } from "@/store";
 import useLayerHelper from "@/hooks/useLayerHelper";
+import useOperateHelper from "@/hooks/useOperateHelper";
 
 const Move: FC = () => {
   const moving = useStoreState((state) => state.operateModel.moving);
-  const setMoving = useStoreActions(
-    (actions) => actions.operateModel.setMoving
-  );
-  const { getLayerById, addActiveLayer, updateLayerById } = useLayerHelper();
-  // 鼠标按下的坐标
-  const [mousePoint, setMousePoint] = useState({ x: 0, y: 0 });
+  const { setMoving, getMoving } = useOperateHelper();
+  const { getLayerById, addActiveLayer, updateLayerById, getActiveLayer } =
+    useLayerHelper();
+  // 使用 useRef 声明变量
+  const startPosRef = useRef({ x: 0, y: 0 });
+  const startLayerPosRef = useRef({ x: 0, y: 0 });
 
   const move_mouseDown = (e: PointerEvent) => {
     const parentDom = findParentByClass(e.target, "m-stage");
-    console.log(e.target);
 
     if (!parentDom || !e.target || moving) {
       return;
     }
 
-    const layerId = (e.target as HTMLElement).getAttribute("id");
-    if (!layerId) {
+    // 判断class是否包含m-resize
+    const isResizeWrapDom = (e.target as HTMLElement).classList.contains(
+      "m-resize"
+    );
+    // 判断class是否包含m-resize__anchor
+    const isResizeAnchorDom = (e.target as HTMLElement).classList.contains(
+      "m-resize__anchor"
+    );
+    if (!isResizeWrapDom && !isResizeAnchorDom) {
       addActiveLayer(undefined);
-      return;
     }
 
-    const activeLayer = getLayerById(layerId);
-    if (!activeLayer) return;
+    const layerId = (e.target as HTMLElement).getAttribute("id");
 
+    const activeLayer = layerId ? getLayerById(layerId) : getActiveLayer();
+    if (!activeLayer) return;
+    startPosRef.current = { x: e.clientX, y: e.clientY };
     addActiveLayer(activeLayer);
-    setMousePoint({ x: e.clientX, y: e.clientY });
+    startLayerPosRef.current = { x: activeLayer.x, y: activeLayer.y };
 
     document.addEventListener("pointermove", move_mouseMove, false);
     document.addEventListener("pointerup", move_mouseUp, false);
   };
 
   const move_mouseUp = () => {
-    if (moving) {
+    if (getMoving()) {
       setMoving(false);
     }
     document.removeEventListener("pointermove", move_mouseMove, false);
@@ -46,33 +54,23 @@ const Move: FC = () => {
 
   const move_mouseMove = (e: PointerEvent) => {
     setMoving(true);
-    // 计算出移动位置
-    const moveX = e.clientX - mousePoint.x;
-    const moveY = e.clientY - mousePoint.y;
-    // if (activeLayer && !Array.isArray(activeLayer)) {
-    //   updateLayerById({
-    //     id: activeLayer.id,
-    //     layer: {
-    //       ...activeLayer,
-    //       x: activeLayer.x + moveX,
-    //       y: activeLayer.y + moveY,
-    //     },
-    //   });
-    // }
 
-    // console.log(!Array.isArray(activeLayers) && activeLayers);
-    // if (!Array.isArray(activeLayers) && activeLayers) {
-    //   activeLayers.x += moveX;
-    //   activeLayers.y += moveY;
-    //   // const layerIndex = getLayerIndex(activeLayers.id);
-    //   // console.log(layerIndex);
-    //   // if (layerIndex !== -1) {
-    //   //   updateLayerByIndex({
-    //   //     index: layerIndex,
-    //   //     layer: activeLayers,
-    //   //   });
-    //   // }
-    // }
+    const activeLayer = getActiveLayer();
+    if (!activeLayer) return;
+
+    const deltaX = e.clientX - startPosRef.current.x;
+    const deltaY = e.clientY - startPosRef.current.y;
+    const x = startLayerPosRef.current.x + deltaX;
+    const y = startLayerPosRef.current.y + deltaY;
+
+    updateLayerById({
+      id: activeLayer.id,
+      layer: {
+        ...activeLayer,
+        x,
+        y,
+      },
+    });
   };
 
   useEffect(() => {

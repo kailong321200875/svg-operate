@@ -15,11 +15,16 @@ const useLayerHelper = () => {
     (actions) => actions.layerModel.updateLayerById
   );
 
+  const getActiveLayer = useStoreActions(
+    (actions) => actions.layerModel.getActiveLayer
+  );
+
   return {
     getLayerById,
     addLayer,
     addActiveLayer,
     updateLayerById,
+    getActiveLayer,
   };
 };
 
