@@ -1,4 +1,4 @@
-import { FC, memo, useEffect, useRef, useState } from "react";
+import React, { FC, memo, useEffect, useRef, useState } from "react";
 import operatePoint from "./operate-point";
 import { LayerType } from "@/types/layer";
 import cs from "classnames";
@@ -10,63 +10,18 @@ const WIDTH = 5;
 interface AnchorDataProps {
   anchorData: {
     name: string;
+    style: React.CSSProperties;
     position: {
       x: number;
       y: number;
     };
     angle: number;
   };
-  activeLayer: LayerType | undefined;
 }
 
 // 锚点组件
 const Anchor: FC<AnchorDataProps> = memo((props) => {
-  const { activeLayer, anchorData } = props;
-  const [position, setPosition] = useState(anchorData.position);
-
-  useEffect(() => {
-    if (activeLayer) {
-      let adjustedX = 0;
-      let adjustedY = 0;
-      switch (anchorData.name) {
-        case "top":
-          adjustedX = activeLayer.width / 2 - WIDTH / 2;
-          adjustedY = -WIDTH / 2;
-          break;
-        case "top-right":
-          adjustedX = activeLayer.width - WIDTH / 2;
-          adjustedY = -WIDTH / 2;
-          break;
-        case "right":
-          adjustedX = activeLayer.width - WIDTH / 2;
-          adjustedY = activeLayer.height / 2 - WIDTH / 2;
-          break;
-        case "right-bottom":
-          adjustedX = activeLayer.width - WIDTH / 2;
-          adjustedY = activeLayer.height - WIDTH / 2;
-          break;
-        case "bottom":
-          adjustedX = activeLayer.width / 2 - WIDTH / 2;
-          adjustedY = activeLayer.height - WIDTH / 2;
-          break;
-        case "bottom-left":
-          adjustedX = -WIDTH / 2;
-          adjustedY = activeLayer.height - WIDTH / 2;
-          break;
-        case "left":
-          adjustedX = -WIDTH / 2;
-          adjustedY = activeLayer.height / 2 - WIDTH / 2;
-          break;
-        case "left-top":
-          adjustedX = -WIDTH / 2;
-          adjustedY = -WIDTH / 2;
-          break;
-        default:
-          break;
-      }
-      setPosition({ x: adjustedX, y: adjustedY });
-    }
-  }, [activeLayer]);
+  const { anchorData } = props;
 
   return (
     <span
@@ -76,9 +31,8 @@ const Anchor: FC<AnchorDataProps> = memo((props) => {
         height: WIDTH,
         cursor: "pointer",
         position: "absolute",
-        left: position.x,
-        top: position.y,
-        transform: `rotate(${anchorData.angle}deg)`,
+        ...anchorData.style,
+        transform: `${anchorData.style.transform} rotate(${anchorData.angle}deg)`,
       }}
     ></span>
   );
@@ -102,20 +56,10 @@ const Resize: FC<ResizeProps> = (props) => {
   const [domInfo, setDomInfo] = useState<DomInfoProps | null>(null);
 
   const renderAnchor = () => {
-    if (activeLayer) {
-      return operatePoint.map((item) => {
-        const { name } = item;
-        return (
-          <Anchor
-            key={name}
-            anchorData={item}
-            activeLayer={activeLayer}
-          ></Anchor>
-        );
-      });
-    } else {
-      return null;
-    }
+    return operatePoint.map((item) => {
+      const { name } = item;
+      return <Anchor key={name} anchorData={item}></Anchor>;
+    });
   };
 
   useEffect(() => {

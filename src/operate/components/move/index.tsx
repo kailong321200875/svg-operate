@@ -14,6 +14,8 @@ const Move: FC = () => {
 
   const move_mouseDown = (e: PointerEvent) => {
     const parentDom = findParentByClass(e.target, "m-stage");
+    console.log(e.target);
+
     if (!parentDom || !e.target || moving) {
       return;
     }
