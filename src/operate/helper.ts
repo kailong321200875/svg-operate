@@ -11,7 +11,7 @@ export const findParentByClass = (
   if (!dom || dom.tagName === "BODY") {
     return null;
   }
-  if (dom.classList.contains(className)) {
+  if (dom?.classList?.contains(className)) {
     return dom as HTMLElement;
   }
   return findParentByClass(dom.parentNode, className);

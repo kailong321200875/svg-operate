@@ -1,4 +1,4 @@
-import React, { FC, memo, useEffect, useRef, useState } from "react";
+import React, { FC, memo } from "react";
 import operatePoint from "./operate-point";
 import { LayerType } from "@/types/layer";
 import cs from "classnames";
@@ -44,7 +44,6 @@ interface ResizeProps {
 
 const Resize: FC<ResizeProps> = (props) => {
   const { activeLayer, moving } = props;
-  const currentTarget = useRef<HTMLElement>();
 
   const renderAnchor = () => {
     return operatePoint.map((item) => {

@@ -14,21 +14,19 @@ const Move: FC = () => {
   const startLayerPosRef = useRef({ x: 0, y: 0 });
 
   const move_mouseDown = (e: PointerEvent) => {
+    console.log(e.target);
     const parentDom = findParentByClass(e.target, "m-stage");
 
-    if (!parentDom || !e.target || moving) {
-      return;
-    }
-
-    // 判断class是否包含m-resize
-    const isResizeWrapDom = (e.target as HTMLElement).classList.contains(
-      "m-resize"
-    );
-    // 判断class是否包含m-resize__anchor
     const isResizeAnchorDom = (e.target as HTMLElement).classList.contains(
       "m-resize__anchor"
     );
-    if (!isResizeWrapDom && !isResizeAnchorDom) {
+
+    if (!parentDom || !e.target || moving || isResizeAnchorDom) {
+      return;
+    }
+
+    // 判断class是否包含m-resize__anchor
+    if (!isResizeAnchorDom) {
       addActiveLayer(undefined);
     }
 
