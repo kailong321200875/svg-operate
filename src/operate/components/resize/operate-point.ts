@@ -6,8 +6,6 @@ export default [
       left: "50%",
       transform: "translate(-50%, -50%)",
     },
-    position: { x: 50, y: 0 },
-    angle: -90,
   },
   {
     name: "top-right",
@@ -16,8 +14,6 @@ export default [
       right: 0,
       transform: "translate(50%, -50%)",
     },
-    position: { x: 100, y: 0 },
-    angle: -45,
   },
   {
     name: "right",
@@ -26,8 +22,6 @@ export default [
       right: 0,
       transform: "translate(50%, -50%)",
     },
-    position: { x: 100, y: 50 },
-    angle: 0,
   },
   {
     name: "right-bottom",
@@ -36,8 +30,6 @@ export default [
       right: 0,
       transform: "translate(50%, 50%)",
     },
-    position: { x: 100, y: 100 },
-    angle: 45,
   },
   {
     name: "bottom",
@@ -46,8 +38,6 @@ export default [
       left: "50%",
       transform: "translate(-50%, 50%)",
     },
-    position: { x: 50, y: 100 },
-    angle: 90,
   },
   {
     name: "bottom-left",
@@ -56,8 +46,6 @@ export default [
       left: 0,
       transform: "translate(-50%, 50%)",
     },
-    position: { x: 0, y: 100 },
-    angle: 135,
   },
   {
     name: "left",
@@ -66,8 +54,6 @@ export default [
       left: 0,
       transform: "translate(-50%, -50%)",
     },
-    position: { x: 0, y: 50 },
-    angle: 180,
   },
   {
     name: "left-top",
@@ -76,7 +62,5 @@ export default [
       left: 0,
       transform: "translate(-50%, -50%)",
     },
-    position: { x: 0, y: 0 },
-    angle: 225,
   },
 ];

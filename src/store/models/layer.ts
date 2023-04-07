@@ -15,12 +15,6 @@ export interface LayerModel {
   >;
   activeLayer: Computed<LayerModel, LayerType | undefined>;
   addActiveLayer: Action<LayerModel, LayerType | undefined>;
-  // updateLayerById: Thunk<
-  //   LayerModel,
-  //   { id: string; layer: LayerType },
-  //   undefined,
-  //   LayerModel
-  // >;
   updateLayerById: Action<LayerModel, { id: string; layer: LayerType }>;
   getActiveLayer: Thunk<
     LayerModel,
@@ -30,6 +24,7 @@ export interface LayerModel {
     LayerType | undefined
   >;
   selected: string | undefined;
+  renderLayers: Computed<LayerModel, LayerType[]>;
 }
 
 export const layerModel: LayerModel = {
@@ -74,11 +69,16 @@ export const layerModel: LayerModel = {
     const layers = state.layers;
     const index = layers.findIndex((layer) => layer.id === id);
     if (index !== -1) {
-      layers[index] = layer;
+      // 使用数组的splice方法替换
+      layers.splice(index, 1, layer);
     }
   }),
 
   getActiveLayer: thunk((_, __, { getState }) => {
     return getState().activeLayer;
+  }),
+
+  renderLayers: computed([(state) => state.layers], (layers) => {
+    return layers;
   }),
 };

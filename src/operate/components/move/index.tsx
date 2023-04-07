@@ -12,9 +12,9 @@ const Move: FC = () => {
   // 使用 useRef 声明变量
   const startPosRef = useRef({ x: 0, y: 0 });
   const startLayerPosRef = useRef({ x: 0, y: 0 });
+  const stageRef = useRef<HTMLDivElement | null>();
 
   const move_mouseDown = (e: PointerEvent) => {
-    console.log(e.target);
     const parentDom = findParentByClass(e.target, "m-stage");
 
     const isResizeAnchorDom = (e.target as HTMLElement).classList.contains(
@@ -38,20 +38,26 @@ const Move: FC = () => {
     addActiveLayer(activeLayer);
     startLayerPosRef.current = { x: activeLayer.x, y: activeLayer.y };
 
-    document.addEventListener("pointermove", move_mouseMove, false);
-    document.addEventListener("pointerup", move_mouseUp, false);
+    stageRef?.current?.addEventListener("pointermove", move_mouseMove, false);
+    stageRef?.current?.addEventListener("pointerup", move_mouseUp, false);
   };
 
   const move_mouseUp = () => {
     if (getMoving()) {
       setMoving(false);
     }
-    document.removeEventListener("pointermove", move_mouseMove, false);
-    document.removeEventListener("pointerup", move_mouseUp, false);
+    stageRef?.current?.removeEventListener(
+      "pointermove",
+      move_mouseMove,
+      false
+    );
+    stageRef?.current?.removeEventListener("pointerup", move_mouseUp, false);
   };
 
   const move_mouseMove = (e: PointerEvent) => {
-    setMoving(true);
+    if (!getMoving()) {
+      setMoving(true);
+    }
 
     const activeLayer = getActiveLayer();
     if (!activeLayer) return;
@@ -72,12 +78,19 @@ const Move: FC = () => {
   };
 
   useEffect(() => {
-    document.addEventListener("pointerdown", move_mouseDown, false);
-    document.addEventListener("pointerup", move_mouseUp, false);
+    stageRef.current = document.querySelector(".m-stage") as HTMLDivElement;
+
+    if (!stageRef.current) return;
+    stageRef?.current?.addEventListener("pointerdown", move_mouseDown, false);
+    stageRef?.current?.addEventListener("pointerup", move_mouseUp, false);
 
     return () => {
-      document.removeEventListener("pointermove", move_mouseMove, false);
-      document.removeEventListener("pointerup", move_mouseUp, false);
+      stageRef?.current?.removeEventListener(
+        "pointermove",
+        move_mouseMove,
+        false
+      );
+      stageRef?.current?.removeEventListener("pointerup", move_mouseUp, false);
     };
   }, []);
 

@@ -12,11 +12,11 @@ const LayerOperate: FC = () => {
     <>
       <Move />
       <Cover activeLayer={activeLayer} moving={moving} />
-      <Resize
+      {/* <Resize
         key={activeLayer ? activeLayer.id : undefined}
         activeLayer={activeLayer}
         moving={moving}
-      />
+      /> */}
     </>
   );
 };

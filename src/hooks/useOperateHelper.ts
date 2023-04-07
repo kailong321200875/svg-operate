@@ -9,9 +9,19 @@ const useOperateHelper = () => {
     (actions) => actions.operateModel.getMoving
   );
 
+  const setScaling = useStoreActions(
+    (actions) => actions.operateModel.setScaling
+  );
+
+  const getScaling = useStoreActions(
+    (actions) => actions.operateModel.getScaling
+  );
+
   return {
     setMoving,
     getMoving,
+    setScaling,
+    getScaling,
   };
 };
 
