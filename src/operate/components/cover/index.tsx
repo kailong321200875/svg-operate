@@ -3,14 +3,15 @@ import { LayerType } from "@/types/layer";
 import cs from "classnames";
 import "./index.less";
 import useLayerHelper from "@/hooks/useLayerHelper";
+import { useStoreState } from "@/store";
 
 interface CoverProps {
-  activeLayer: LayerType | undefined;
   moving: boolean;
 }
 
 const Cover: FC<CoverProps> = (props) => {
-  const { activeLayer, moving } = props;
+  const selected = useStoreState((state) => state.layerModel.selected);
+  const { moving } = props;
   const [coverLayer, setCoverLayer] = useState<LayerType | undefined>();
   const coverLayerIdRef = useRef<string | undefined>();
   const { getLayerById } = useLayerHelper();
@@ -45,7 +46,7 @@ const Cover: FC<CoverProps> = (props) => {
     };
   }, []);
 
-  return coverLayer && activeLayer?.id !== coverLayer.id && !moving ? (
+  return coverLayer && selected !== coverLayer.id && !moving ? (
     <div
       className={cs("m-cover")}
       style={{

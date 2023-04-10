@@ -1,5 +1,6 @@
 import { FC, memo, CSSProperties } from "react";
 import { ImageLayer } from "@/types/image-layer";
+import { LayerType } from "@/types/layer";
 import cs from "classnames";
 import BaseLayer from "../base-layer";
 
@@ -9,6 +10,7 @@ export interface ImageLayerProps {
 
 const ImageLayer: FC<ImageLayerProps> = (props) => {
   const { layer } = props;
+  console.log("ImageLayer: ", layer.id);
 
   const imageStyle: CSSProperties = {
     width: layer.width,

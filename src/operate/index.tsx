@@ -5,18 +5,14 @@ import Cover from "./components/cover";
 import { useStoreState } from "@/store";
 
 const LayerOperate: FC = () => {
-  const activeLayer = useStoreState((state) => state.layerModel.activeLayer);
   const moving = useStoreState((state) => state.operateModel.moving);
+  const selected = useStoreState((state) => state.layerModel.selected);
 
   return (
     <>
       <Move />
-      <Cover activeLayer={activeLayer} moving={moving} />
-      {/* <Resize
-        key={activeLayer ? activeLayer.id : undefined}
-        activeLayer={activeLayer}
-        moving={moving}
-      /> */}
+      <Cover moving={moving} />
+      <Resize key={selected} moving={moving} />
     </>
   );
 };

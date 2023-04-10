@@ -5,6 +5,7 @@ import cs from "classnames";
 import "./index.less";
 import useLayerHelper from "@/hooks/useLayerHelper";
 import useOperateHelper from "@/hooks/useOperateHelper";
+import { useStoreState } from "@/store";
 
 const MIN_WIDTH = 10;
 const MIN_HEIGHT = 10;
@@ -42,12 +43,12 @@ const Anchor: FC<AnchorDataProps> = memo((props) => {
 });
 
 interface ResizeProps {
-  activeLayer: LayerType | undefined;
   moving: boolean;
 }
 
 const Resize: FC<ResizeProps> = (props) => {
-  const { activeLayer, moving } = props;
+  const { moving } = props;
+  const activeLayer = useStoreState((state) => state.layerModel.activeLayer);
 
   const renderAnchor = () => {
     return operatePoint.map((item) => {

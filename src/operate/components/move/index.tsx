@@ -21,16 +21,20 @@ const Move: FC = () => {
       "m-resize__anchor"
     );
 
+    const isResizeDom = (e.target as HTMLElement).classList.contains(
+      "m-resize"
+    );
+
     if (!parentDom || !e.target || moving || isResizeAnchorDom) {
       return;
     }
 
+    const layerId = (e.target as HTMLElement).getAttribute("id");
+
     // 判断class是否包含m-resize__anchor
-    if (!isResizeAnchorDom) {
+    if (!isResizeAnchorDom && !isResizeDom && !layerId) {
       addActiveLayer(undefined);
     }
-
-    const layerId = (e.target as HTMLElement).getAttribute("id");
 
     const activeLayer = layerId ? getLayerById(layerId) : getActiveLayer();
     if (!activeLayer) return;
