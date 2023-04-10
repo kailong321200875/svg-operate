@@ -148,6 +148,16 @@ const Resize: FC<ResizeProps> = (props) => {
       height = activeLayerRef.current.height * scale;
       left = activeLayerRef.current.x - (width - activeLayerRef.current.width);
       top = activeLayerRef.current.y;
+    } else if (anchorNameRef.current === "top") {
+      height = Math.max(activeLayerRef.current.height - deltaY, MIN_HEIGHT);
+      top = activeLayerRef.current.y + deltaY;
+    } else if (anchorNameRef.current === "right") {
+      width = Math.max(activeLayerRef.current.width + deltaX, MIN_WIDTH);
+    } else if (anchorNameRef.current === "bottom") {
+      height = Math.max(activeLayerRef.current.height + deltaY, MIN_HEIGHT);
+    } else if (anchorNameRef.current === "left") {
+      width = Math.max(activeLayerRef.current.width - deltaX, MIN_WIDTH);
+      left = activeLayerRef.current.x + deltaX;
     }
 
     updateLayerById({
@@ -162,7 +172,7 @@ const Resize: FC<ResizeProps> = (props) => {
     });
   };
 
-  const move_mouseUp = (e: PointerEvent) => {
+  const move_mouseUp = () => {
     if (getScaling()) {
       setScaling(false);
     }
