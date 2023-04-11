@@ -53,6 +53,8 @@ const Rotate: FC = () => {
     }
     if (!activeLayerRef.current) return;
 
+    if (!activeLayerRef.current) return;
+
     const start = { x: activeLayerRef.current.x, y: activeLayerRef.current.y };
     const end = { x: e.clientX, y: e.clientY };
     const center = {
@@ -65,9 +67,7 @@ const Rotate: FC = () => {
       Math.atan2(end.y - center.y, end.x - center.x) -
       Math.atan2(start.y - center.y, start.x - center.x);
     const degree = (radian * 180) / Math.PI;
-
     const rotate = activeLayerRef.current.rotate + degree;
-    activeLayerRef.current.rotate = rotate;
 
     updateLayerById({
       id: activeLayerRef.current.id,
