@@ -17,11 +17,21 @@ const useOperateHelper = () => {
     (actions) => actions.operateModel.getScaling
   );
 
+  const setRotating = useStoreActions(
+    (actions) => actions.operateModel.setRotating
+  );
+
+  const getRotating = useStoreActions(
+    (actions) => actions.operateModel.getRotating
+  );
+
   return {
     setMoving,
     getMoving,
     setScaling,
     getScaling,
+    setRotating,
+    getRotating,
   };
 };
 

@@ -21,18 +21,28 @@ const Move: FC = () => {
       "m-resize__anchor"
     );
 
+    const isResizeRotateDom = (e.target as HTMLElement).classList.contains(
+      "m-resize__rotate"
+    );
+
     const isResizeDom = (e.target as HTMLElement).classList.contains(
       "m-resize"
     );
 
-    if (!parentDom || !e.target || moving || isResizeAnchorDom) {
+    if (
+      !parentDom ||
+      !e.target ||
+      moving ||
+      isResizeAnchorDom ||
+      isResizeRotateDom
+    ) {
       return;
     }
 
     const layerId = (e.target as HTMLElement).getAttribute("id");
 
     // 判断class是否包含m-resize__anchor
-    if (!isResizeAnchorDom && !isResizeDom && !layerId) {
+    if (!isResizeAnchorDom && !isResizeRotateDom && !isResizeDom && !layerId) {
       addActiveLayer(undefined);
     }
 
@@ -89,6 +99,11 @@ const Move: FC = () => {
     stageRef?.current?.addEventListener("pointerup", move_mouseUp, false);
 
     return () => {
+      stageRef?.current?.removeEventListener(
+        "pointerdown",
+        move_mouseDown,
+        false
+      );
       stageRef?.current?.removeEventListener(
         "pointermove",
         move_mouseMove,

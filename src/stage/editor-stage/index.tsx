@@ -1,9 +1,10 @@
 import { FC, memo } from "react";
 import cs from "classnames";
-import "./index.less";
+// import "./index.less";
 import useLayerHelper from "@/hooks/useLayerHelper";
 import { v4 } from "uuid";
 import { LayerTypeEnum } from "@/types/base-layer";
+import { EditorStageStyle } from "./index.style";
 
 interface EditorStageProps {
   width: number;
@@ -22,6 +23,7 @@ const EditorStage: FC<EditorStageProps> = (props) => {
       url: "https://i03piccdn.sogoucdn.com/7c72d123880113d8",
       width: 203,
       height: 320,
+      rotate: 0,
       x: width / 2 - 203 / 2,
       y: height / 2 - 320 / 2,
     });
@@ -30,15 +32,9 @@ const EditorStage: FC<EditorStageProps> = (props) => {
   return (
     <>
       <button onClick={addImageLayer}>新增图层</button>
-      <div
-        className={cs("m-stage")}
-        style={{
-          width,
-          height,
-        }}
-      >
+      <EditorStageStyle width={width} height={height} className={cs("m-stage")}>
         {children}
-      </div>
+      </EditorStageStyle>
     </>
   );
 };

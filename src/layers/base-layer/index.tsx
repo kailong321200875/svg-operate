@@ -1,7 +1,7 @@
 import { FC, memo, ReactNode } from "react";
 import { LayerType } from "@/types/layer";
 import cs from "classnames";
-import "./index.less";
+import { BaseLayerStyle } from "./index.style";
 
 interface BaseLayerProps {
   children: ReactNode;
@@ -13,16 +13,14 @@ const BaseLayer: FC<BaseLayerProps> = (props) => {
 
   console.log("==================" + layer.id + "==================");
   return (
-    <div
-      className={cs("m-base-layer")}
+    <BaseLayerStyle
       style={{
-        position: "absolute",
-        transform: `translate(${layer.x}px, ${layer.y}px)`,
-        transformOrigin: "center",
+        transform: `translate(${layer.x}px, ${layer.y}px) rotate(${layer.rotate}deg)`,
       }}
+      className={cs("base-layer")}
     >
       {children}
-    </div>
+    </BaseLayerStyle>
   );
 };
 

@@ -8,6 +8,7 @@ export interface BaseLayer {
   layerType: LayerTypeEnum;
   width: number;
   height: number;
+  rotate: number;
   x: number;
   y: number;
 }

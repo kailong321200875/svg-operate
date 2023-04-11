@@ -1,9 +1,9 @@
 import { FC, memo, useEffect, useRef, useState } from "react";
 import { LayerType } from "@/types/layer";
 import cs from "classnames";
-import "./index.less";
 import useLayerHelper from "@/hooks/useLayerHelper";
 import { useStoreState } from "@/store";
+import { CoverStyle } from "./index.style";
 
 interface CoverProps {
   moving: boolean;
@@ -47,13 +47,12 @@ const Cover: FC<CoverProps> = (props) => {
   }, []);
 
   return coverLayer && selected !== coverLayer.id && !moving ? (
-    <div
+    <CoverStyle
       className={cs("m-cover")}
       style={{
         width: coverLayer?.width,
         height: coverLayer?.height,
-        transform: `translate(${coverLayer.x}px, ${coverLayer.y}px)`,
-        transformOrigin: "center",
+        transform: `translate(${coverLayer.x}px, ${coverLayer.y}px) rotate(${coverLayer.rotate}deg)`,
       }}
     />
   ) : null;

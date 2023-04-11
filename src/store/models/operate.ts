@@ -7,6 +7,9 @@ export interface OperateModel {
   scaling: boolean;
   setScaling: Action<OperateModel, boolean>;
   getScaling: Thunk<OperateModel, void, {}, {}, boolean>;
+  rotating: boolean;
+  setRotating: Action<OperateModel, boolean>;
+  getRotating: Thunk<OperateModel, void, {}, {}, boolean>;
 }
 
 export const operateModel: OperateModel = {
@@ -23,5 +26,12 @@ export const operateModel: OperateModel = {
   }),
   getScaling: thunk((_, __, { getState }) => {
     return getState().scaling;
+  }),
+  rotating: false,
+  setRotating: action((state, rotating) => {
+    state.rotating = rotating;
+  }),
+  getRotating: thunk((_, __, { getState }) => {
+    return getState().rotating;
   }),
 };

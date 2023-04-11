@@ -2,13 +2,14 @@ import React, { FC, memo, useEffect, useRef } from "react";
 import operatePoint from "./operate-point";
 import { LayerType } from "@/types/layer";
 import cs from "classnames";
-import "./index.less";
 import useLayerHelper from "@/hooks/useLayerHelper";
 import useOperateHelper from "@/hooks/useOperateHelper";
 import { useStoreState } from "@/store";
+import { ResizeStyle } from "./index.style";
+import Rotate from "../rotate";
 
-const MIN_WIDTH = 10;
-const MIN_HEIGHT = 10;
+const MIN_WIDTH = 20;
+const MIN_HEIGHT = 20;
 
 interface AnchorDataProps {
   anchorData: {
@@ -69,7 +70,10 @@ const Resize: FC<ResizeProps> = (props) => {
     const isResizeAnchorDom = (e.target as HTMLElement).classList.contains(
       "m-resize__anchor"
     );
-    if (!isResizeAnchorDom) {
+    const isResizeRotateDom = (e.target as HTMLElement).classList.contains(
+      "m-resize__rotate"
+    );
+    if (!isResizeAnchorDom && !isResizeRotateDom) {
       return;
     }
 
@@ -149,15 +153,40 @@ const Resize: FC<ResizeProps> = (props) => {
       left = activeLayerRef.current.x - (width - activeLayerRef.current.width);
       top = activeLayerRef.current.y;
     } else if (anchorNameRef.current === "top") {
-      height = Math.max(activeLayerRef.current.height - deltaY, MIN_HEIGHT);
-      top = activeLayerRef.current.y + deltaY;
+      const newHeight = Math.max(
+        activeLayerRef.current.height - deltaY,
+        MIN_HEIGHT
+      );
+      const newTop = activeLayerRef.current.y + deltaY;
+      // 高度不能小于最小值
+      console.log(newHeight, MIN_HEIGHT);
+      if (newHeight >= MIN_HEIGHT) {
+        height = newHeight;
+        // 重新计算top值，使锚点始终与图层的顶部对齐
+        top = Math.min(
+          newTop,
+          activeLayerRef.current.y + activeLayerRef.current.height - MIN_HEIGHT
+        );
+      }
     } else if (anchorNameRef.current === "right") {
       width = Math.max(activeLayerRef.current.width + deltaX, MIN_WIDTH);
     } else if (anchorNameRef.current === "bottom") {
       height = Math.max(activeLayerRef.current.height + deltaY, MIN_HEIGHT);
     } else if (anchorNameRef.current === "left") {
-      width = Math.max(activeLayerRef.current.width - deltaX, MIN_WIDTH);
-      left = activeLayerRef.current.x + deltaX;
+      const newWidth = Math.max(
+        activeLayerRef.current.width - deltaX,
+        MIN_WIDTH
+      );
+      const newLeft = activeLayerRef.current.x + deltaX;
+      // 宽度不能小于最小值
+      if (newWidth >= MIN_WIDTH) {
+        width = newWidth;
+        // 重新计算left值，使锚点始终与图层的左边缘对齐
+        left = Math.min(
+          newLeft,
+          activeLayerRef.current.x + activeLayerRef.current.width - MIN_WIDTH
+        );
+      }
     }
 
     updateLayerById({
@@ -185,23 +214,25 @@ const Resize: FC<ResizeProps> = (props) => {
     document?.addEventListener("pointerup", move_mouseUp, false);
 
     return () => {
+      document?.removeEventListener("pointerdown", move_mouseDown, false);
       document?.removeEventListener("pointermove", move_mouseMove, false);
       document?.removeEventListener("pointerup", move_mouseUp, false);
     };
   }, []);
 
   return activeLayer ? (
-    <div
-      className={cs("m-resize", { "m-resize--moving": moving })}
+    <ResizeStyle
+      className={cs("m-resize")}
       style={{
         width: activeLayer?.width,
         height: activeLayer?.height,
-        transform: `translate(${activeLayer.x}px, ${activeLayer.y}px)`,
-        transformOrigin: "center",
+        transform: `translate(${activeLayer.x}px, ${activeLayer.y}px) rotate(${activeLayer.rotate}deg)`,
+        opacity: moving ? 0.5 : 1,
       }}
     >
       {renderAnchor()}
-    </div>
+      <Rotate />
+    </ResizeStyle>
   ) : null;
 };
 
